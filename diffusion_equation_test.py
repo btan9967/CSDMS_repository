@@ -1,23 +1,9 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# # Diffusion equation:
-# This is the diffusion equation: $$ \frac{\partial z}{\partial t} = D\frac{\partial^2 z}{\partial x^2} $$ and $$ z^{t+1}_x = z^t_x + {D \Delta t \over \Delta x^2} (z^t_{x+1} - 2z^t_x + z^t_{x-1}) $$Assuming constant diffusivity, a regular grid, and a step function for the initial profile. Here, $z$ is elevation, $t$ is time, $x$ is the spatial dimension and $D$ is a transport rate coefficient, sometimes called hillslope diffusivity.
-# 
-# This is the forward in time centered-in-space discretization scheme.
-
-# In[2]:
-
-
 import os
 import sys
 import tomllib
 
 import numpy as np
 import matplotlib.pyplot as plt
-
-
-# In[3]:
 
 
 def calculate_stable_time_step(dx, diffusivity):
@@ -111,13 +97,7 @@ def load_params_from_path(filepath):
     return params
 
 
-# In[14]:
-
-
 get_ipython().run_line_magic('pip', 'install mpl_ascii')
-
-
-# In[4]:
 
 
 if __name__ == "__main__":
@@ -140,14 +120,9 @@ if __name__ == "__main__":
     np.savetxt(sys.stdout, elevation, fmt="%.6f")
 
 
-# In[7]:
-
 
 D = 100
 Lx= 300
-
-
-# In[8]:
 
 
 dx = 0.5
@@ -157,10 +132,6 @@ nx = len(x) # number of grid nodes
 print(x[:100])
 print(nx)
 
-
-# Setting up the initial conditions.
-
-# In[9]:
 
 
 z = np.zeros_like(x)
@@ -172,20 +143,7 @@ z[x > Lx / 2] = z_right
 print(f"{z[:100]}" + "\n" + f"{z[500:]}")
 
 
-# Plot the initial profile.
 
-# In[10]:
-
-
-plt.figure()
-plt.plot(x, z, "r")
-plt.ylabel("z")
-plt.xlabel("x")
-plt.title("Initial hillslope profile")
-plt.show()
-
-
-# In[12]:
 
 
 nt = 5000
@@ -193,32 +151,22 @@ dt = 0.5 * dx**2 / D
 print(dt)
 
 
-# In[ ]:
-
-
 Loop over the time steps of the model.
-
-
-# In[13]:
 
 
 for t in range(0, nt):
 	z[1:-1] += D * dt / dx ** 2 * (z[:-2] - 2*z[1:-1] + z[2:])
 
 
-# In[15]:
+def plot_figure(elevation, grid, color = "r", title = "Hillslope Profile"):
+    plt.figure()
+    plt.plot(grid, elevation, color)
+    plt.ylabel("elevation")
+    plt.xlabel("distance")
+    plt.title("Hillslope Profile")
 
+def define_grid(start = 0, stop = Lx, step = dx):
+    return np.arange(start, stop, step)
 
-plt.figure()
-plt.plot(x, z, "r")
-plt.ylabel("z")
-plt.xlabel("x")
-plt.title("Final hillslope profile")
-plt.show()
-
-
-# In[ ]:
-
-
-
-
+def evolve_in_time():
+    return 0
